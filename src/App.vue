@@ -42,8 +42,8 @@
           <v-col cols="8">
             <!-- First Row -->
             <v-row>
-              <v-col cols="6">
-                <v-card class="mb-4" style="height: 300px;">
+              <v-col cols="3">
+                <v-card class="mb-3" style="height: 300px;">
                   <v-card-title>Action Buttons</v-card-title>
                   <v-card-text>
                     <v-row>
@@ -51,13 +51,21 @@
                         v-for="(value, key) in filteredData('I_Button_')"
                         :key="key"
                         cols="12"
+                        class="d-flex align-items-center"
                       >
+                        <!-- Text on the left, vertically centered -->
+                        <div style="font-size: 1em; font-weight: bold; margin-right: auto; display: flex; align-items: center;">
+                          {{ key }}
+                        </div>
+                        <!-- Circular Button with Icon on the right -->
                         <v-btn
                           :color="value ? 'success' : 'error'"
-                          class="ma-2"
-                          style="width: 100%; height: 50px;"
+                          class="ma-0"
+                          style="width: 50px; height: 60px; border-radius: 50%; "
                         >
-                          {{ key }}: {{ value ? 'On' : 'Off' }}
+                          <v-icon style="font-size: 61px;">
+                            {{ value ? 'mdi-play-circle-outline' : 'mdi-stop-circle-outline' }}
+                          </v-icon>
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -65,7 +73,9 @@
                 </v-card>
               </v-col>
 
-              <v-col cols="6">
+
+
+              <v-col cols="9">
                 <v-card class="mb-4" style="height: 300px;">
                   <v-card-title>Counter Status</v-card-title>
                   <v-card-text>
@@ -77,7 +87,7 @@
                       >
                         <v-card
                           style="
-                            height: 150px;
+                            height: 100px;
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
@@ -99,12 +109,12 @@
             <!-- Graph Rows -->
             <v-row>
               <v-col>
-                <v-card height="200px" class="mb-4">
+                <v-card height="300px" class="mb-4">
                   <v-card-title>Graph Placeholder 1</v-card-title>
                   <v-card-text style="height: 100%;">
                     <!-- Provide the object of counters to the chart -->
                     <div style="height: 150px;">
-                      <!-- <CounterChart :data-points="filteredData('O_Counter_')" /> -->
+                      <CounterChart :data-points="filteredData('O_Counter_Entry')" />
                       <!-- <CounterChart :data-points="{ O_Counter_1: 10, O_Counter_2: 20, O_Counter_3: 5 }"/> -->
                     </div>
                   </v-card-text>
@@ -196,12 +206,12 @@
 import mqtt from 'mqtt-browser';
 import { mqttConfig } from './mqttConfig';
 
-// import CounterChart from '@/components/CounterChart.vue';
+import CounterChart from '@/components/CounterChart.vue';
 
 export default {
-  // components: {
-  //   CounterChart,
-  // },
+  components: {
+    CounterChart,
+  },
   data() {
     return {
       drawer: true,
@@ -229,7 +239,7 @@ export default {
     });
 
     this.client.on('message', (topic, message) => {
-      console.log('Message received:', message.toString());
+      // console.log('Message received:', message.toString());
       try {
         this.statusData = JSON.parse(message.toString());
       } catch (err) {

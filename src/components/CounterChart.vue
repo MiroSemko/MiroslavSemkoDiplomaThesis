@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 240px;">
+  <div style="height: 270px;">
     <!-- Pass the `data` and `options` props to the `ChartJS` component -->
     <ChartJS :type="'line'" :data="chartData" :options="chartOptions" :key="JSON.stringify(chartData)"/>
   </div>
@@ -46,12 +46,14 @@ export default {
         labels: [], // X-axis labels
         datasets: [
           {
-            label: "Counter Values",
+            label: "Entered Products",
             backgroundColor: "#f87979",
             borderColor: "#f87979",
             data: [], // Y-axis data
             fill: false,
-            tension: 0.1,
+            tension: 0.2,
+            pointRadius: 0, // Remove dots on the line
+            pointHoverRadius: 0, // Remove hover effect for dots
           },
         ],
       },
@@ -59,9 +61,30 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         animation: false,
+        plugins: {
+          legend: {
+            display: false, // Disable the legend entirely
+          },
+        },
         scales: {
+          x: {
+            grid: {
+              display: false, // Remove vertical grid lines
+            },
+            ticks: {
+              display: false, // Optionally, keep or remove X-axis labels
+            },
+          },
           y: {
-            beginAtZero: true,
+            grid: {
+              display: false, // Remove horizontal grid lines
+            },
+            ticks: {
+              display: true, // Optionally, keep or remove Y-axis labels
+              callback: function (value) {
+                return Math.floor(value); // Remove decimals by rounding down
+              },
+            }
           },
         },
       },
@@ -94,7 +117,7 @@ export default {
       const newData = [...this.chartData.datasets[0].data, productCount];
 
       // Optional: Limit data points
-      const maxDataPoints = 30;
+      const maxDataPoints = 200;
       if (newLabels.length > maxDataPoints) {
         newLabels.shift();
         newData.shift();

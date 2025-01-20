@@ -176,7 +176,7 @@
 
             <!-- Graphs Side by Side -->
             <v-row>
-              <v-col cols="6">
+              <v-col cols="7">
                 <v-card height="340px" class="mb-4">
                   <v-card-title>Graph Left Lane</v-card-title>
                   <v-card-text style="height: 100%;">
@@ -186,7 +186,7 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="5">
                 <v-card height="340px" class="mb-4">
                   <v-card-title>Graph Colors</v-card-title>
                   <v-card-text style="height: 100%;">
@@ -218,22 +218,25 @@
                             :key="key"
                             cols="12"
                           >
-                            <v-card>
-                              <v-card-title>{{ key }}</v-card-title>
-                              <v-card-text>
-                                <v-chip
-                                  :color="value ? 'green' : 'red'"
-                                  dark
-                                >
-                                  {{ value ? 'True' : 'False' }}
-                                </v-chip>
-                              </v-card-text>
-                            </v-card>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ props }">
+                                <v-card v-bind="props">
+                                  <v-card-title>{{ key }}</v-card-title>
+                                  <v-card-text>
+                                    <v-chip :color="value ? 'green' : 'red'" dark>
+                                      {{ value ? 'True' : 'False' }}
+                                    </v-chip>
+                                  </v-card-text>
+                                </v-card>
+                              </template>
+                              <span>{{ key }}</span>
+                            </v-tooltip>
                           </v-col>
                         </v-row>
                       </v-card-text>
                     </v-card>
                   </v-col>
+
 
                   <!-- Inputs Section -->
                   <v-col cols="6">
@@ -246,22 +249,25 @@
                             :key="key"
                             cols="12"
                           >
-                            <v-card>
-                              <v-card-title>{{ key }}</v-card-title>
-                              <v-card-text>
-                                <v-chip
-                                  :color="value ? 'green' : 'red'"
-                                  dark
-                                >
-                                  {{ value ? 'True' : 'False' }}
-                                </v-chip>
-                              </v-card-text>
-                            </v-card>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ props }">
+                                <v-card v-bind="props">
+                                  <v-card-title>{{ key }}</v-card-title>
+                                  <v-card-text>
+                                    <v-chip :color="value ? 'green' : 'red'" dark>
+                                      {{ value ? 'True' : 'False' }}
+                                    </v-chip>
+                                  </v-card-text>
+                                </v-card>
+                              </template>
+                              <span>{{ key }}</span>
+                            </v-tooltip>
                           </v-col>
                         </v-row>
                       </v-card-text>
                     </v-card>
                   </v-col>
+
                 </v-row>
               </v-card-text>
             </v-card>

@@ -5,20 +5,28 @@ let mainWindow;
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
-      nodeIntegration: false
-    }
+      nodeIntegration: false,
+    },
+    show: false, // Prevents the window from flashing before maximization
   });
 
-  // Načítanie HTML súboru z výstupu Vite
+  // Load the HTML file or URL
   mainWindow.loadURL('http://localhost:3000');
 
-  // Otvorenie DevTools pre ladenie
-  mainWindow.webContents.openDevTools();
+  // Optionally open DevTools
+  // mainWindow.webContents.openDevTools();
+
+  // Maximize the window when ready
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.maximize();
+    mainWindow.show(); // Show the window after maximizing
+  });
+
+  // Remove the default menu bar
+  mainWindow.setMenu(null);
 });
 
 app.on('window-all-closed', () => {

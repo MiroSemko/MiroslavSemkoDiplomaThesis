@@ -107,7 +107,7 @@
 
     <!-- Main Content -->
     <v-main>
-      <v-container fluid class="pa-6 pl-8 pb-0">
+      <v-container fluid class="pt-5 pl-8 pb-0 mb-0">
         <v-row>
           <!-- Left Column -->
           <v-col cols="8">
@@ -177,7 +177,7 @@
             <!-- Graphs Side by Side -->
             <v-row>
               <v-col cols="7">
-                <v-card height="340px" class="mb-4">
+                <v-card height="365px" class="mb-4">
                   <v-card-title>Graph Left Lane</v-card-title>
                   <v-card-text style="height: 100%;">
                     <div style="height: 150px;">
@@ -187,7 +187,7 @@
                 </v-card>
               </v-col>
               <v-col cols="5">
-                <v-card height="340px" class="mb-4">
+                <v-card height="365px" class="mb-4">
                   <v-card-title>Graph Colors</v-card-title>
                   <v-card-text style="height: 100%;">
                     <div style="height: 150px;">
@@ -203,7 +203,7 @@
 
           <!-- Right Column -->
           <v-col cols="4">
-            <v-card style="max-height: 680px; overflow-y: auto;">
+            <v-card style="max-height: 705px; overflow-y: auto;">
               <v-card-title>Details</v-card-title>
               <v-card-text>
                 <v-row>

@@ -69,6 +69,22 @@
       <!-- Bottom Navigation Items -->
       <template v-slot:append>
         <v-list density="compact" nav>
+          <v-list-item>
+            <template v-slot:prepend>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ props }">
+                  <v-icon
+                    size="32"
+                    v-bind="props"
+                    @click="toggleTheme"
+                  >
+                    {{ isDark ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}
+                  </v-icon>
+                </template>
+                <span>{{ isDark ? 'Switch To Light Mode' : 'Switch To Dark Mode' }}</span>
+              </v-tooltip>
+            </template>
+          </v-list-item>
           <v-list-item
             title="Settings"
             value="settings"
@@ -283,6 +299,8 @@
 <script>
 import mqtt from "mqtt-browser";
 import { mqttConfig } from "./mqttConfig";
+import { useTheme } from 'vuetify'
+import { computed } from 'vue'; 
 
 import CounterChart from "@/components/CounterChart.vue";
 import PieChart from "@/components/PieChart.vue";
@@ -291,6 +309,20 @@ export default {
   components: {
     CounterChart,
     PieChart
+  },
+  setup() {
+    const theme = useTheme();
+
+    const isDark = computed(() => theme.global.name.value === 'dark');
+
+    const toggleTheme = () => {
+      theme.global.name.value = isDark.value ? 'light' : 'dark';
+    };
+
+    return {
+      isDark,
+      toggleTheme,
+    };
   },
   data() {
     return {

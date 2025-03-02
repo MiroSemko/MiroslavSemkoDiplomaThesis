@@ -8,8 +8,6 @@
       style="width: 66px;"
     >
       <!-- Profile at the top -->
-
-        
         <v-list-item class="mt-2 mb-2">
           <template v-slot:prepend>
             <v-icon size="32" color="primary">mdi-rocket-launch</v-icon>
@@ -89,6 +87,7 @@
             title="Settings"
             value="settings"
             style="font-size: 18px;"
+            to="/settings"
           >
             <template v-slot:prepend>
               <v-tooltip bottom>
@@ -120,7 +119,6 @@
       </template>
     </v-navigation-drawer>
 
-
     <!-- Main Content -->
     <v-main>
       <v-container fluid class="pt-5 pl-8 pb-0 mb-0">
@@ -133,23 +131,31 @@
                 <v-card class="mb-3" style="height: 300px;">
                   <v-card-title>Action Buttons</v-card-title>
                   <v-card-text>
-                    <v-row>
+                    <v-row class="mt-3">
                       <v-col
                         v-for="(value, key) in formattedData('I_Button_')"
                         :key="key"
                         cols="12"
                         class="d-flex align-items-center"
                       >
-                        <div style="font-size: 1rem; font-weight: bold; margin-right: auto; display: flex; align-items: center;">
+                        <div style="font-size: 1.7rem; font-weight: bold; margin-right: auto; display: flex; align-items: center;">
                           {{ key }}
                         </div>
                         <v-btn
                           :color="value ? '#f87979' : '#64af68'"
                           class="ma-0"
-                          style="width: 50px; height: 60px; border-radius: 50%;"
+                          style="width: 80px; height: 80px; border-radius: 50%;"
+                          @click="toggleDevice(key)"
                         >
-                          <v-icon style="font-size: 61px;">
-                            {{ value ? 'mdi-stop-circle-outline' : 'mdi-play-circle-outline' }}
+                          <v-icon style="font-size: 81px;">
+                            <!-- {{ value ? 'mdi-stop-circle-outline' : 'mdi-play-circle-outline' }} -->
+                            {{
+                              key.toLowerCase() === "start"
+                                ? "mdi-play-circle-outline"
+                                : key.toLowerCase() === "stop"
+                                ? "mdi-stop-circle-outline"
+                                : "mdi-play-circle-outline"
+                            }}
                           </v-icon>
                         </v-btn>
                       </v-col>
@@ -165,29 +171,33 @@
                   <v-card-text>
                     <v-row>
                       <v-col
-                        cols="4"
+                        :cols="Math.floor(12 / columnCount)"
                         v-for="(value, key) in formattedData('O_Counter_')"
                         :key="key"
                       >
                         <v-card
-                          style="
-                            height: 100px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                          "
+                          :style="{
+                            height: dynamicCardHeight + 'px',
+                            display: 'flex',
+                            flexDirection: dynamicCardHeight < 100 ? 'row' : 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                          }"
                         >
                           <span style="font-size: 2.8rem; font-weight: bold;">
                             {{ value }}
                           </span>
-                          <span style="margin-top: 8px; font-size: 1.05rem">{{ key }}</span>
+                          <span style="margin-top: 8px; font-size: 1.05rem">
+                            {{ key }}
+                          </span>
                         </v-card>
                       </v-col>
                     </v-row>
                   </v-card-text>
                 </v-card>
               </v-col>
+
+
             </v-row>
 
             <!-- Graphs Side by Side -->
@@ -292,6 +302,7 @@
           </v-col>
         </v-row>
       </v-container>
+
     </v-main>
   </v-app>
 </template>
@@ -330,6 +341,7 @@ export default {
       rail: true,
       client: null,
       topic: "mqtt",
+      returnTopic: "mqttback",
       statusData: null,
     };
   },
@@ -357,7 +369,30 @@ export default {
         console.error("Failed to parse message:", err);
       }
     });
-  },
+    },
+    computed: {
+      columnCount() {
+        const totalSensors = Object.keys(this.formattedData("O_Counter_")).length;
+
+        if (totalSensors === 3) return 3; // 3x1 grid
+        if (totalSensors === 4) return 2; // 2x2 grid
+        if (totalSensors <= 6) return 3; // 3x2 grid
+        if (totalSensors <= 8) return 4; // 4x2 grid
+        if (totalSensors <= 12) return 4; // 4x3 grid
+        return 6; // More than 12 sensors → 6 columns
+      },
+      rowCount() {
+        const totalSensors = Object.keys(this.formattedData("O_Counter_")).length;
+        return Math.ceil(totalSensors / this.columnCount);
+      },
+      dynamicCardHeight() {
+        if (this.rowCount === 1) return 220; // If only 1 row, increase height
+        if (this.rowCount === 3) return 60; // If exactly 3 rows, decrease height
+        return 100; // Default height
+      }
+    },
+
+
   methods: {
     subscribe() {
       if (this.topic) {
@@ -366,6 +401,23 @@ export default {
             console.log(`Subscribed to topic: ${this.topic}`);
           }
         });
+      }
+    },  
+    toggleDevice(action) {
+      // const message = {
+      //   action: action
+      // };
+
+      if (this.client && this.client.connected) {
+        this.client.publish(this.returnTopic, action, { qos: 0, retain: false }, (err) => {
+          if (err) {
+            console.error("MQTT Publish Error:", err);
+          } else {
+            console.log(`MQTT Message Sent: ${JSON.stringify(message)}`);
+          }
+        });
+      } else {
+        console.error("MQTT client is not connected");
       }
     },
     filteredData(prefix, exclude = []) {

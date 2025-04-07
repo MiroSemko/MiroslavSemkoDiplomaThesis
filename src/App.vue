@@ -92,7 +92,8 @@
             <template v-slot:prepend>
               <v-tooltip bottom>
                 <template v-slot:activator="{ props }">
-                  <v-icon size="32" v-bind="props">mdi-cog</v-icon>
+                  <v-icon size="32" v-bind="props" @click="showSettingsModal = true">mdi-cog</v-icon>
+
                 </template>
                 <span>Settings</span>
               </v-tooltip>
@@ -304,6 +305,30 @@
       </v-container>
 
     </v-main>
+
+    <v-dialog v-model="showSettingsModal" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">MQTT Settings</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-text-field label="MQTT Topic" v-model="mqttSettings.topic" />
+          <v-text-field label="Username" v-model="mqttSettings.username" />
+          <v-text-field
+            label="Password"
+            v-model="mqttSettings.password"
+            type="password"
+          />
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="primary" @click="applySettings">Save</v-btn>
+          <v-btn text @click="showSettingsModal = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -343,32 +368,16 @@ export default {
       topic: "mqtt",
       returnTopic: "mqttback",
       statusData: null,
+      showSettingsModal: false,
+      mqttSettings: {
+        topic: "mqtt",
+        username: mqttConfig.username,
+        password: mqttConfig.password,
+      },
     };
   },
   mounted() {
-    const options = {
-      username: mqttConfig.username,
-      password: mqttConfig.password,
-    };
-
-    this.client = mqtt.connect(mqttConfig.url, options);
-
-    this.client.on("connect", () => {
-      console.log("Connected to MQTT broker");
-      this.subscribe();
-    });
-
-    this.client.on("error", (err) => {
-      console.error("MQTT Connection Error:", err);
-    });
-
-    this.client.on("message", (topic, message) => {
-      try {
-        this.statusData = JSON.parse(message.toString());
-      } catch (err) {
-        console.error("Failed to parse message:", err);
-      }
-    });
+      this.connectToMQTT();
     },
     computed: {
       columnCount() {
@@ -394,6 +403,31 @@ export default {
 
 
   methods: {
+    connectToMQTT() {
+      const options = {
+        username: this.mqttSettings.username,
+        password: this.mqttSettings.password,
+      };
+
+      this.client = mqtt.connect(mqttConfig.url, options);
+
+      this.client.on("connect", () => {
+        console.log("Connected to MQTT broker");
+        this.subscribe();
+      });
+
+      this.client.on("error", (err) => {
+        console.error("MQTT Connection Error:", err);
+      });
+
+      this.client.on("message", (topic, message) => {
+        try {
+          this.statusData = JSON.parse(message.toString());
+        } catch (err) {
+          console.error("Failed to parse message:", err);
+        }
+      });
+    },
     subscribe() {
       if (this.topic) {
         this.client.subscribe(this.topic, (err) => {
@@ -441,7 +475,17 @@ export default {
           value,
         ])
       );
-    }
+    },
+    applySettings() {
+      if (this.client) {
+        this.client.end();
+      }
+
+      this.topic = this.mqttSettings.topic;
+      this.connectToMQTT();
+      this.showSettingsModal = false;
+    },
+
 
   },
 };

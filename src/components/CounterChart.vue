@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 270px;">
+  <div style="height: 295px;">
     <!-- Pass the `data` and `options` props to the `ChartJS` component -->
     <ChartJS :type="'line'" :data="chartData" :options="chartOptions" :key="JSON.stringify(chartData)"/>
   </div>
@@ -34,7 +34,6 @@ export default {
   components: { ChartJS: ChartJSComponent },
   props: {
     dataPoints: {
-      // Example: { O_Counter_1: 10, O_Counter_2: 20 }
       type: Object,
       required: false,
       default: () => ({}),
@@ -43,13 +42,13 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [], // X-axis labels
+        labels: [],
         datasets: [
           {
-            label: "Entered Products",
-            backgroundColor: "#f87979",
-            borderColor: "#f87979",
-            data: [], // Y-axis data
+            label: "Products",
+            backgroundColor: "#36A2EB",
+            borderColor: "#36A2EB",
+            data: [],
             fill: false,
             tension: 0.2,
             pointRadius: 0, // Remove dots on the line
@@ -80,6 +79,7 @@ export default {
               display: false, // Remove horizontal grid lines
             },
             ticks: {
+              stepSize: 1,
               display: true, // Optionally, keep or remove Y-axis labels
               callback: function (value) {
                 return Math.floor(value); // Remove decimals by rounding down

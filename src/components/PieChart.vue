@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 270px;">
+    <div style="height: 295px;">
       <!-- Pass the `data` and `options` props to the `ChartJS` component -->
       <ChartJS :type="'pie'" :data="chartData" :options="chartOptions" />
     </div>

@@ -13,6 +13,9 @@ app.on('ready', () => {
     show: false, // Prevents the window from flashing before maximization
   });
 
+  // Disable throttling when minimized
+  mainWindow.webContents.setBackgroundThrottling(false);
+
   // Load the HTML file or URL
   mainWindow.loadURL('http://localhost:3000');
 

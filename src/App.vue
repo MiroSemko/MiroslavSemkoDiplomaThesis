@@ -132,28 +132,28 @@
                 <v-card class="mb-3" style="height: 300px;">
                   <v-card-title>Action Buttons</v-card-title>
                   <v-card-text>
-                    <v-row class="mt-3">
+                    <v-row>
                       <v-col
                         v-for="(value, key) in formattedData('I_Button_')"
                         :key="key"
                         cols="12"
                         class="d-flex align-items-center"
                       >
-                        <div style="font-size: 1.7rem; font-weight: bold; margin-right: auto; display: flex; align-items: center;">
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-right: auto; display: flex; align-items: center;">
                           {{ key }}
                         </div>
                         <v-btn
                           :color="value ? '#f87979' : '#64af68'"
                           class="ma-0"
-                          style="width: 80px; height: 80px; border-radius: 50%;"
-                          @click="toggleDevice(key)"
+                          style="width: 60px; height: 60px; border-radius: 50%;"
+                          @click="sendButtonData(key,value)"
                         >
-                          <v-icon style="font-size: 81px;">
+                          <v-icon style="font-size: 61px;">
                             <!-- {{ value ? 'mdi-stop-circle-outline' : 'mdi-play-circle-outline' }} -->
                             {{
                               key.toLowerCase() === "start"
                                 ? "mdi-play-circle-outline"
-                                : key.toLowerCase() === "stop"
+                                : key.toLowerCase() === "stop" || key.toLowerCase() === "emergency stop"
                                 ? "mdi-stop-circle-outline"
                                 : "mdi-play-circle-outline"
                             }}
@@ -437,13 +437,14 @@ export default {
         });
       }
     },  
-    toggleDevice(action) {
-      // const message = {
-      //   action: action
-      // };
+      sendButtonData(action, value) {
+      const message = {
+        action: action,
+        value: value
+      };
 
       if (this.client && this.client.connected) {
-        this.client.publish(this.returnTopic, action, { qos: 0, retain: false }, (err) => {
+        this.client.publish(this.returnTopic, JSON.stringify(message), { qos: 0, retain: false }, (err) => {
           if (err) {
             console.error("MQTT Publish Error:", err);
           } else {
@@ -454,6 +455,7 @@ export default {
         console.error("MQTT client is not connected");
       }
     },
+
     filteredData(prefix, exclude = []) {
       if (!this.statusData) return {};
       return Object.fromEntries(

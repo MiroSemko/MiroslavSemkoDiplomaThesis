@@ -314,6 +314,7 @@
 
         <v-card-text>
           <v-text-field label="MQTT Topic" v-model="mqttSettings.topic" />
+          <v-text-field label="MQTT Back Topic" v-model="mqttSettings.returnTopic" />
           <v-text-field label="Username" v-model="mqttSettings.username" />
           <v-text-field
             label="Password"
@@ -371,6 +372,7 @@ export default {
       showSettingsModal: false,
       mqttSettings: {
         topic: "mqtt",
+        returnTopic: "mqttback",
         username: mqttConfig.username,
         password: mqttConfig.password,
       },
@@ -484,6 +486,7 @@ export default {
       }
 
       this.topic = this.mqttSettings.topic;
+      this.returnTopic = this.mqttSettings.returnTopic;
       this.connectToMQTT();
       this.showSettingsModal = false;
     },

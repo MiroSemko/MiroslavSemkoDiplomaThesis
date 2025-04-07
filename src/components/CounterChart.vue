@@ -15,6 +15,7 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
 } from "chart.js";
 import { Chart as ChartJSComponent } from "vue-chartjs";
 
@@ -26,7 +27,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement
+  LineElement,
+  LineController
 );
 
 export default {

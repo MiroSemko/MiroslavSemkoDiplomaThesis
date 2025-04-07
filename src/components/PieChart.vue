@@ -12,8 +12,18 @@
     Tooltip,
     Legend,
     ArcElement,
+    PieController,
   } from "chart.js";
   import { Chart as ChartJSComponent } from "vue-chartjs";
+
+  
+  ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    PieController
+  )
   
   // Register required Chart.js components globally
   ChartJS.register(Title, Tooltip, Legend, ArcElement);

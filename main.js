@@ -3,6 +3,8 @@ const path = require('path');
 
 let mainWindow;
 
+const isDev = !app.isPackaged;
+
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     webPreferences: {
@@ -17,10 +19,14 @@ app.on('ready', () => {
   mainWindow.webContents.setBackgroundThrottling(false);
 
   // Load the HTML file or URL
-  mainWindow.loadURL('http://localhost:3000');
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:3000');
+  } else {
+    mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html'));
+  }
 
   // Optionally open DevTools
-  // mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   // Maximize the window when ready
   mainWindow.once('ready-to-show', () => {

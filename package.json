@@ -2,22 +2,44 @@
   "name": "electron-vue-mqtt",
   "version": "1.0.0",
   "main": "main.js",
+  "build": {
+    "appId": "com.stufei.miroslavsemkodp",
+    "productName": "MiroslavSemkoDP",
+    "files": [
+      "dist/**",
+      "main.js",
+      "preload.js",
+      "node_modules/**",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "sign": false,
+      "identity": null
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "start": "electron ."
+    "build:vue": "vite build",
+    "start": "electron .",
+    "build": "npm run build:vue && electron-builder --win --x64"
   },
   "dependencies": {
     "chart.js": "^4.4.7",
-    "electron": "^25.9.8",
     "mqtt-browser": "^4.3.7",
     "vue": "^3.2.0",
     "vue-chartjs": "^5.3.2"
   },
   "devDependencies": {
+    "electron": "^25.9.8",
     "@vitejs/plugin-vue": "^2.0.0",
     "@vuetify/vite-plugin": "1.0.0-alpha.11",
-    "electron-packager": "^16.0.0",
+    "electron-builder": "^26.0.12",
     "vite": "^2.7.0"
   }
 }

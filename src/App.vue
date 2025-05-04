@@ -247,8 +247,12 @@
                           >
                             <v-tooltip bottom>
                               <template v-slot:activator="{ props }">
-                                <v-card v-bind="props">
-                                  <v-card-title>{{ key }}</v-card-title>
+                                <v-card v-bind="props"
+                                  style="height: 130px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 8px;"
+                                >
+                                  <v-card-title
+                                    style="white-space: normal; overflow: visible; text-overflow: unset; word-break: break-word; line-height: 1.2; min-height: 3em;"
+                                  >{{ key }}</v-card-title>
                                   <v-card-text>
                                     <v-chip :color="value ? 'green' : 'red'" dark>
                                       {{ value ? 'True' : 'False' }}
@@ -278,8 +282,12 @@
                           >
                             <v-tooltip bottom>
                               <template v-slot:activator="{ props }">
-                                <v-card v-bind="props">
-                                  <v-card-title>{{ key }}</v-card-title>
+                                <v-card v-bind="props"
+                                  style="height: 130px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 8px;"
+                                >
+                                  <v-card-title
+                                    style="white-space: normal; overflow: visible; text-overflow: unset; word-break: break-word; line-height: 1.2; min-height: 3em;"
+                                  >{{ key }}</v-card-title>
                                   <v-card-text>
                                     <v-chip :color="value ? 'green' : 'red'" dark>
                                       {{ value ? 'True' : 'False' }}

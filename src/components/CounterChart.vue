@@ -64,29 +64,45 @@ export default {
         animation: false,
         plugins: {
           legend: {
-            display: false, // Disable the legend entirely
+            display: false,
           },
         },
         scales: {
           x: {
+            title: {
+              display: true,
+              text: 'Time',
+              color: '#666',
+              font: {
+                size: 12,
+              },
+            },
             grid: {
-              display: false, // Remove vertical grid lines
+              display: false,
             },
             ticks: {
-              display: false, // Optionally, keep or remove X-axis labels
+              display: false,
             },
           },
           y: {
+            title: {
+              display: true,
+              text: 'Product Count',
+              color: '#666',
+              font: {
+                size: 12,
+              },
+            },
             grid: {
-              display: false, // Remove horizontal grid lines
+              display: false,
             },
             ticks: {
               stepSize: 1,
-              display: true, // Optionally, keep or remove Y-axis labels
+              display: true,
               callback: function (value) {
-                return Math.floor(value); // Remove decimals by rounding down
+                return Math.floor(value);
               },
-            }
+            },
           },
         },
       },

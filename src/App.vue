@@ -143,19 +143,21 @@
                           {{ key }}
                         </div>
                         <v-btn
-                          :color="value ? '#f87979' : '#64af68'"
-                          class="ma-0"
-                          style="width: 60px; height: 60px; border-radius: 50%;"
-                          @click="sendButtonData(key,value)"
+                          :style="key.toLowerCase() === 'emergency stop'
+                            ? 'width: 60px; height: 60px; border-radius: 50%; background-color: #f87979; border: 5px solid yellow;'
+                            : 'width: 60px; height: 60px; border-radius: 50%; background-color: ' + (value ? '#f87979' : '#64af68')"
+                          class="ma-0 pa-0"
+                          @click="sendButtonData(key, value)"
                         >
-                          <v-icon style="font-size: 61px;">
-                            <!-- {{ value ? 'mdi-stop-circle-outline' : 'mdi-play-circle-outline' }} -->
+                          <v-icon style="font-size: 48px; color: white;">
                             {{
-                              key.toLowerCase() === "start"
-                                ? "mdi-play-circle-outline"
-                                : key.toLowerCase() === "stop" || key.toLowerCase() === "emergency stop"
+                              key.toLowerCase() === "emergency stop"
+                                ? "mdi-close-octagon-outline"
+                                : key.toLowerCase() === "stop"
                                 ? "mdi-stop-circle-outline"
-                                : "mdi-play-circle-outline"
+                                : key.toLowerCase() === "start"
+                                ? "mdi-play-circle-outline"
+                                : "mdi-help-circle"
                             }}
                           </v-icon>
                         </v-btn>

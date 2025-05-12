@@ -325,6 +325,7 @@
         <v-card-text>
           <v-text-field label="MQTT Topic" v-model="mqttSettings.topic" />
           <v-text-field label="MQTT Back Topic" v-model="mqttSettings.returnTopic" />
+          <v-text-field label="Broker URL" v-model="mqttSettings.url" />
           <v-text-field label="Username" v-model="mqttSettings.username" />
           <v-text-field
             label="Password"
@@ -381,6 +382,7 @@ export default {
       statusData: null,
       showSettingsModal: false,
       mqttSettings: {
+        url: mqttConfig.url,
         topic: "mqtt",
         returnTopic: "mqttback",
         username: mqttConfig.username,
@@ -421,7 +423,7 @@ export default {
         password: this.mqttSettings.password,
       };
 
-      this.client = mqtt.connect(mqttConfig.url, options);
+      this.client = mqtt.connect(this.mqttSettings.url, options);
 
       this.client.on("connect", () => {
         console.log("Connected to MQTT broker");
